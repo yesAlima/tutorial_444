@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'tab_new.dart';
+import 'tab_list.dart';
+import 'laptop_details.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,50 +13,72 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Boxes(),
-      ),
+      debugShowCheckedModeBanner: false, // Disable the debug banner
+      home: HomePage(),
     );
   }
 }
 
-class Boxes extends StatelessWidget {
-  const Boxes({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<LaptopDetails> laptopList = [];
+
+  void addLaptop(LaptopDetails laptop) {
+    setState(() {
+      laptopList.add(laptop);
+    });
+  }
+
+  void deleteLaptop(int index) {
+    setState(() {
+      laptopList.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.05,
-            left: MediaQuery.of(context).size.width * 0.05,
-            child: Container(
-              color: Colors.red,
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.9,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Text(
+            "Laptops",
+            style: TextStyle(
+              color: Colors.white,
             ),
           ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.1,
-            left: MediaQuery.of(context).size.width * 0.1,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight),
             child: Container(
-              color: Colors.green,
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.8,
+              color: Colors.white,
+              child: const TabBar(
+                tabs: [
+                  Tab(text: 'New'),
+                  Tab(text: 'List'),
+                ],
+                labelColor: Colors.green,
+                unselectedLabelColor: Colors.grey,
+                indicatorColor: Colors.lightGreen,
+              ),
             ),
           ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
-            left: MediaQuery.of(context).size.width * 0.15,
-            child: Container(
-              color: Colors.yellow,
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.7,
+        ),
+        body: TabBarView(
+          children: [
+            TabNew(onAdd: addLaptop),
+            TabList(
+              laptopList: laptopList,
+              onDelete: deleteLaptop,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
