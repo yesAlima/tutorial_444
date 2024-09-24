@@ -1,3 +1,8 @@
 {
-  "java.compile.nullAnalysis.mode": "automatic"
+  "[dart]": {
+    "editor.formatOnSave": true
+  },
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cmake.sourceDirectory": "/home/mohamed/Desktop/tutorial_444/tutorial_444/linux",
+  
 }
